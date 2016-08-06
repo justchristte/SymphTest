@@ -1,0 +1,12 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/activity_user_list_layout">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_user_list_users"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>
