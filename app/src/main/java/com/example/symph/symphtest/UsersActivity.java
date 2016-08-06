@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.symph.symphtest.adapter.UsersActivityAdapter;
 import com.example.symph.symphtest.database.UserTable;
+import com.example.symph.symphtest.helper.DividerItemDecoration;
 import com.example.symph.symphtest.helper.Helper;
 import com.example.symph.symphtest.object.User;
 
@@ -38,6 +40,7 @@ public class UsersActivity extends AppCompatActivity implements UsersActivityAda
 
         list=new ArrayList<>();
         adapter=new UsersActivityAdapter(getApplicationContext(),list,this);
+        listView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         listView.setAdapter(adapter);
 
         try{

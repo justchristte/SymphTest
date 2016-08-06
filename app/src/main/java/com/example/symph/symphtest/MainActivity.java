@@ -53,10 +53,13 @@ public class MainActivity extends ActionBarActivity {
                         @Override
                         public void run() {
                             try {
-                                User user = Helper.getUser(userName.getText().toString());
+                                String string = userName.getText().toString();
+                                setDialogMessage(string + " avatar");
+                                User user = Helper.getUser(string);
                                 long userId = saveUser(user);
                                 if (userId > 0) {
-                                    saveFollowers(user.getFollowersLink(),userId);
+                                    setDialogTitle("Downloading follower data");
+                                    saveFollowers(user.getFollowersLink(), userId);
                                     gotoUsersActivity();
                                 }
                             } catch (JSONException e) {
@@ -81,6 +84,7 @@ public class MainActivity extends ActionBarActivity {
             for(int c=0;c<array.length();c++){
                 json=array.getJSONObject(c);
                 follower=new Follower(json,id);
+                setDialogMessage(follower.getLogin()+" avatar");
                 Bitmap bitmap=Helper.getImage(json.getString("avatar_url"));
                 if(bitmap!=null)
                     follower.setByteArray(Helper.toByteArray(bitmap));
@@ -125,6 +129,24 @@ public class MainActivity extends ActionBarActivity {
 
     public void gotoUsersActivity(){
         startActivity(new Intent(MainActivity.this, UsersActivity.class));
+    }
+
+    public void setDialogMessage(final String string){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setMessage(string);
+            }
+        });
+    }
+
+    public void setDialogTitle(final String string){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setTitle(string);
+            }
+        });
     }
 
     public void showProgressDialog(){

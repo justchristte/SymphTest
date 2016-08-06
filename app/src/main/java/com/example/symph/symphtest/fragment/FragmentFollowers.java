@@ -4,19 +4,23 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.symph.symphtest.R;
 import com.example.symph.symphtest.adapter.FragmentFollowerAdapter;
 import com.example.symph.symphtest.database.FollowerTable;
+import com.example.symph.symphtest.helper.DividerItemDecoration;
 import com.example.symph.symphtest.helper.Helper;
 import com.example.symph.symphtest.object.Follower;
 
@@ -33,12 +37,6 @@ public class FragmentFollowers extends Fragment implements FragmentFollowerAdapt
     FragmentFollowerAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_followers_layout, container, false);
@@ -48,6 +46,7 @@ public class FragmentFollowers extends Fragment implements FragmentFollowerAdapt
 
         list=new ArrayList<>();
         adapter=new FragmentFollowerAdapter(getContext(),list,this);
+        listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         listView.setAdapter(adapter);
 
         try{
@@ -84,9 +83,7 @@ public class FragmentFollowers extends Fragment implements FragmentFollowerAdapt
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://github.com/"+follower.getLogin()));
-                        startActivity(browserIntent);
+                        Helper.viewOnBrowser(getContext(),"http://github.com/"+follower.getLogin());
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -98,7 +95,7 @@ public class FragmentFollowers extends Fragment implements FragmentFollowerAdapt
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("View "+follower.getLogin()+" on browser?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("View "+follower.getLogin()+" on github?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
 }

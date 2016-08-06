@@ -97,6 +97,9 @@ public class DrawerActivity extends AppCompatActivity implements FragmentDrawer.
                 bundle.putInt("userId",user.getId());
                 fragment.setArguments(bundle);
                 break;
+            case 3:
+                Helper.viewOnBrowser(this,"http://github.com/"+user.getLogin());
+                break;
             default:
                 break;
         }

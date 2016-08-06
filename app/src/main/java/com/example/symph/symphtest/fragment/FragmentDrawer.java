@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.symph.symphtest.R;
 import com.example.symph.symphtest.adapter.NavigationDrawerAdapter;
+import com.example.symph.symphtest.helper.DividerItemDecoration;
 import com.example.symph.symphtest.helper.NavDrawerItem;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class FragmentDrawer extends Fragment {
 
         // drawer labels
 //        titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
-        titles= new String[]{"Followers", "Follwed", "Repos"};
+        titles= new String[]{"Followers", "Follwed", "Repos","View in Github"};
     }
 
     @Override
@@ -74,6 +76,7 @@ public class FragmentDrawer extends Fragment {
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
         adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
@@ -178,6 +181,6 @@ public class FragmentDrawer extends Fragment {
     }
 
     public interface FragmentDrawerListener {
-        public void onDrawerItemSelected(View view, int position);
+        void onDrawerItemSelected(View view, int position);
     }
 }

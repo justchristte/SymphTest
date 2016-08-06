@@ -1,7 +1,10 @@
 package com.example.symph.symphtest.helper;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -76,6 +79,12 @@ public class Helper {
             user.setByteArray(Helper.toByteArray(bitmap));
         }
         return user;
+    }
+
+    public static void viewOnBrowser(Context context,String url){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(url));
+        context.startActivity(browserIntent);
     }
 
     public static byte[] toByteArray(Bitmap bitmap){
