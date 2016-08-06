@@ -6,103 +6,66 @@ import android.os.Bundle;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Blob;
-import java.util.IdentityHashMap;
-
-/**
- * Created by Kenneth on 8/5/2016.
- */
 public class User {
+
     int id;
     String login;
     String githubId;
-    String gravatarId;
-    String url;
+    String avatarUrl;
     String htmlUrl;
-    String type;
-    String followersLink;
-    boolean siteAdmin;
+    String followersUrl;
+    String followingUrl;
+    String reposUrl;
     byte[] byteArray;
 
-    public User(Cursor cursor){
-        id=Integer.parseInt(cursor.getString(0));
-        login=cursor.getString(1);
-        githubId=cursor.getString(2);
-        gravatarId=cursor.getString(3);
-        url=cursor.getString(4);
-        htmlUrl=cursor.getString(5);
-        type=cursor.getString(6);
-        siteAdmin=getSiteAdmin(cursor.getString(7));
-        byteArray=cursor.getBlob(8);
-    }
+    public User(){}
 
     public User(JSONObject json) throws JSONException {
         login=json.getString("login");
         githubId=json.getString("id");
-        gravatarId=json.getString("gravatar_id");
-        url=json.getString("url");
+        avatarUrl=json.getString("avatar_url");
         htmlUrl=json.getString("html_url");
-        type=json.getString("type");
-        siteAdmin=getSiteAdmin(json.getString("site_admin"));
-        followersLink=json.getString("followers_url");
+        followersUrl=json.getString("followers_url");
+        followingUrl=json.getString("following_url");
+        reposUrl=json.getString("repos_url");
+    }
+
+    public User(Cursor cursor){
+        id=cursor.getInt(0);
+        login=cursor.getString(1);
+        githubId=cursor.getString(2);
+        avatarUrl=cursor.getString(3);
+        htmlUrl=cursor.getString(4);
+        followersUrl=cursor.getString(5);
+        followingUrl=cursor.getString(6);
+        reposUrl=cursor.getString(7);
+    }
+
+    public Bundle toBundle(){
+        Bundle bundle=new Bundle();
+        bundle.putInt("id", getId());
+        bundle.putString("login", getLogin());
+        bundle.putString("githubId",getGithubId());
+        bundle.putString("avatarUrl",getAvatarUrl());
+        bundle.putString("htmlUrl",getHtmlUrl());
+        bundle.putString("followersUrl", getFollowersUrl());
+        bundle.putString("followingUrl", getFollowingUrl());
+        bundle.putString("reposUrl",getReposUrl());
+        bundle.putByteArray("byteArray",getByteArray());
+        return bundle;
     }
 
     public User(Bundle bundle){
         id=bundle.getInt("id");
         login=bundle.getString("login");
         githubId=bundle.getString("githubId");
-        gravatarId=bundle.getString("gravatarId");
-        url=bundle.getString("url");
+        avatarUrl=bundle.getString("avatarUrl");
         htmlUrl=bundle.getString("htmlUrl");
-        type=bundle.getString("type");
-        siteAdmin=bundle.getBoolean("siteAdmin");
+        followersUrl=bundle.getString("followersUrl");
+        followingUrl=bundle.getString("followingUrl");
+        reposUrl=bundle.getString("reposUrl");
         byteArray=bundle.getByteArray("byteArray");
     }
-
-    public User(){ }
-
-    public Bundle toBundle(){
-        Bundle bundle=new Bundle();
-        bundle.putInt("id", getId());
-        bundle.putString("login", getLogin());
-        bundle.putString("gravatarId",getGravatarId());
-        bundle.putString("url",getUrl());
-        bundle.putString("htmlUrl",getHtmlUrl());
-        bundle.putString("type", getType());
-        bundle.putBoolean("siteAdmin",getSiteAdmin());
-        bundle.putByteArray("byteArray",getByteArray());
-        return bundle;
-    }
-
-    public String getFollowersLink() {
-        return followersLink;
-    }
-
-    public void setFollowersLink(String followersLink) {
-        this.followersLink = followersLink;
-    }
-
-    public byte[] getByteArray() {
-        return byteArray;
-    }
-
-    public void setByteArray(byte[] byteArray) {
-        this.byteArray = byteArray;
-    }
-
-    public boolean getSiteAdmin(String string){
-        if(string.equals("false"))
-            return false;
-        else if(string.equals("true"))
-            return true;
-        else if(Integer.parseInt(string)==0)
-            return false;
-        else if(Integer.parseInt(string)==1)
-            return true;
-        return false;
-    }
-
-    public boolean getSiteAdmin(){ return siteAdmin; }
 
     public int getId() {
         return id;
@@ -110,14 +73,6 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getGithubId() {
@@ -128,20 +83,20 @@ public class User {
         this.githubId = githubId;
     }
 
-    public String getGravatarId() {
-        return gravatarId;
+    public String getLogin() {
+        return login;
     }
 
-    public void setGravatarId(String gravatarId) {
-        this.gravatarId = gravatarId;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getHtmlUrl() {
@@ -152,19 +107,36 @@ public class User {
         this.htmlUrl = htmlUrl;
     }
 
-    public String getType() {
-        return type;
+    public String getFollowersUrl() {
+        return followersUrl;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFollowersUrl(String followersUrl) {
+        this.followersUrl = followersUrl;
     }
 
-    public boolean isSiteAdmin() {
-        return siteAdmin;
+    public String getFollowingUrl() {
+        return followingUrl;
     }
 
-    public void setSiteAdmin(boolean siteAdmin) {
-        this.siteAdmin = siteAdmin;
+    public void setFollowingUrl(String followingUrl) {
+        this.followingUrl = followingUrl;
     }
+
+    public String getReposUrl() {
+        return reposUrl;
+    }
+
+    public void setReposUrl(String reposUrl) {
+        this.reposUrl = reposUrl;
+    }
+
+    public byte[] getByteArray() {
+        return byteArray;
+    }
+
+    public void setByteArray(byte[] byteArray) {
+        this.byteArray = byteArray;
+    }
+
 }

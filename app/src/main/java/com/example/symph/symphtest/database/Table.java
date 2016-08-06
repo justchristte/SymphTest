@@ -1,18 +1,15 @@
 package com.example.symph.symphtest.database;
 
-import android.app.ActionBar;
-
 import java.util.ArrayList;
 
-/**
- * Created by Kenneth on 8/5/2016.
- */
 public class Table {
 
-    static final String TYPE_TEXT="TEXT";
-    static final String TYPE_INTEGER_PRIMARY_KEY="INTEGER PRIMARY KEY";
-    static final String TYPE_INTEGER="INTEGER";
-    static final String TYPE_BLOB="BLOB";
+    interface FieldTypes {
+        String TYPE_TEXT="TEXT";
+        String TYPE_INTEGER_PRIMARY_KEY="INTEGER PRIMARY KEY";
+        String TYPE_INTEGER="INTEGER";
+        String TYPE_BLOB="BLOB";
+    }
 
     ArrayList<String>fieldNames;
     ArrayList<String>types;
@@ -34,6 +31,14 @@ public class Table {
         return this;
     }
 
+    public String[] getProjection(){
+        int size=fieldNames.size();
+        String[]projection=new String[size];
+        for(int c=0;c<size;c++)
+            projection[c]=fieldNames.get(c);
+        return projection;
+    }
+
     public String getCreateQuery(){
         String string="CREATE TABLE IF NOT EXISTS "+name+"(";
         int size=fieldNames.size();
@@ -46,15 +51,7 @@ public class Table {
         return string;
     }
 
-    public String[] getProjection(){
-        int size=fieldNames.size();
-        String[]projection=new String[size];
-        for(int c=0;c<size;c++)
-            projection[c]=fieldNames.get(c);
-        return projection;
-    }
-
-    public String getDeleteQuery(){
+    public String getDeleteQuery() {
         return "DROP TABLE IF EXISTS "+name;
     }
 

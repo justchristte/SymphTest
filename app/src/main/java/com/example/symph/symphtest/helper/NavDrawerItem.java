@@ -1,8 +1,5 @@
 package com.example.symph.symphtest.helper;
 
-/**
- * Created by Kenneth on 8/6/2016.
- */
 public class NavDrawerItem {
 
     private boolean showNotify;

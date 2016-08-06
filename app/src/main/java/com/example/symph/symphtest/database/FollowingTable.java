@@ -9,19 +9,19 @@ import com.example.symph.symphtest.object.Follower;
 
 import java.util.ArrayList;
 
-public class FollowerTable extends DatabaseHandler implements Table.FieldTypes{
+public class FollowingTable extends DatabaseHandler implements Table.FieldTypes{
 
-    public static String TABLE_NAME="follower";
+    public static String TABLE_NAME="following";
     public static String ID="id";
     public static String LOGIN="login";
     public static String FOLLOWERS_URL="followers_url";
-    public static String FOLLOWED_URL ="following_url";
-    public static String REPOS_URL ="repos_url";
+    public static String FOLLOWED_URL="following_url";
+    public static String REPOS_URL="repos_url";
     public static String USER_ID="user_id";
     public static String IMAGE="image";
     Table table;
 
-    public FollowerTable(Context context) {
+    public FollowingTable(Context context) {
         super(context);
         table=Table.create(TABLE_NAME)
                 .addField(ID,TYPE_INTEGER_PRIMARY_KEY)
@@ -34,7 +34,7 @@ public class FollowerTable extends DatabaseHandler implements Table.FieldTypes{
         onCreate(this.getWritableDatabase());
     }
 
-    public long addFollower(String login,String followers,String followed,
+    public long addFollowing(String login,String followers,String followed,
                             String repos,int userId,byte[] byteArray){
         ContentValues values=new ContentValues();
         values.put(LOGIN,login);
@@ -46,13 +46,13 @@ public class FollowerTable extends DatabaseHandler implements Table.FieldTypes{
         return Crud.create(this,TABLE_NAME,values);
     }
 
-    public long addFollower(Follower follower){
-        return addFollower(follower.getLogin(), follower.getFollowersUrl(),
+    public long addFollowing(Follower follower){
+        return addFollowing(follower.getLogin(), follower.getFollowersUrl(),
                 follower.getFollowingUrl(), follower.getReposUrl(),
                 follower.getUserId(), follower.getByteArray());
     }
 
-    public ArrayList<Follower> getFollowersFor(int userId){
+    public ArrayList<Follower> getFollowingFor(int userId){
         ArrayList<Follower>list=new ArrayList<>();
         String sql="select * from "+TABLE_NAME+" where "+USER_ID+"="+userId;
         Cursor cursor=Crud.rawQuery(this,sql);
@@ -79,4 +79,5 @@ public class FollowerTable extends DatabaseHandler implements Table.FieldTypes{
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
+
 }

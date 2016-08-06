@@ -9,8 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
-import com.example.symph.symphtest.object.User;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,9 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Kenneth on 8/5/2016.
- */
 public class Helper {
 
     public static String getJsonResponse(String urlString){
@@ -53,32 +48,13 @@ public class Helper {
         return result.toString();
     }
 
-    public static Bitmap getImage(String src){
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static User getUser(String userName) throws JSONException {
-        String response=getJsonResponse(getUserLink(userName));
-        JSONObject json=new JSONObject(response);
-        User user=null;
-        if(json!=null){
-            user=new User(json);
-            Bitmap bitmap = Helper.getImage(json.getString("avatar_url"));
-            user.setByteArray(Helper.toByteArray(bitmap));
-        }
-        return user;
+    public static Bitmap getAvatar(String src) throws IOException {
+        URL url = new URL(src);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoInput(true);
+        connection.connect();
+        InputStream input = connection.getInputStream();
+        return BitmapFactory.decodeStream(input);
     }
 
     public static void viewOnBrowser(Context context,String url){
@@ -104,4 +80,9 @@ public class Helper {
     public static void displayMessage(String message,View view){
         Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
+
+    public static JSONObject getJSON(String username) throws JSONException {
+        return new JSONObject(getJsonResponse(getUserLink(username)));
+    }
+
 }

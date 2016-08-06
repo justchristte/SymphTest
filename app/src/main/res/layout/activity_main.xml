@@ -30,23 +30,38 @@
                 android:textColorHint="@color/text_icon"
                 android:hint="Username"
                 android:id="@+id/activity_main_username"/>
-            <Button
+            <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bordered_button"
-                android:textColor="@color/text_icon"
-                android:textAllCaps="false"
-                android:text="Add new User"
-                android:id="@+id/activity_main_add_user"/>
-            <Button
+                app:rdv_rippleColor="@android:color/holo_blue_dark"
+                app:rdv_rippleAnimationPeakFrame="15"
+                app:rdv_rippleAnimationDuration="600"
+                app:rdv_rippleRadius="50dp">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordered_button"
+                    android:textColor="@color/text_icon"
+                    android:textAllCaps="false"
+                    android:text="Add new User"
+                    android:id="@+id/activity_main_add_user"/>
+            </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
+            <com.thomsonreuters.rippledecoratorview.RippleDecoratorView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bordered_button"
-                android:textColor="@color/text_icon"
-                android:layout_marginTop="10dp"
-                android:textAllCaps="false"
-                android:text="View all Users"
-                android:id="@+id/activity_main_add_view"/>
+                app:rdv_rippleColor="@android:color/holo_blue_dark"
+                app:rdv_rippleAnimationPeakFrame="15"
+                app:rdv_rippleAnimationDuration="600">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordered_button"
+                    android:textColor="@color/text_icon"
+                    android:layout_marginTop="10dp"
+                    android:textAllCaps="false"
+                    android:text="View all Users"
+                    android:id="@+id/activity_main_add_view"/>
+            </com.thomsonreuters.rippledecoratorview.RippleDecoratorView>
 
         </LinearLayout>
 

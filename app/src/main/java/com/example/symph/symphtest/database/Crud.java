@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Kenneth on 8/5/2016.
- */
 public class Crud {
 
     public static long create(SQLiteOpenHelper database, String tableName, ContentValues values){
@@ -22,12 +19,12 @@ public class Crud {
                     values);
         }catch (SQLiteConstraintException e){
             newRowId = -1;
-        };
+        }
 
         return newRowId;
     }
 
-    private static long delete(SQLiteOpenHelper database, String tableName,String comparedField, String id){
+    public static long delete(SQLiteOpenHelper database, String tableName,String comparedField, String id){
         SQLiteDatabase db = database.getReadableDatabase();
 
         // Define 'where' part of query.
@@ -47,7 +44,7 @@ public class Crud {
 
         // How you want the results sorted in the resulting Cursor
 
-        Cursor c = db.query(
+        return  db.query(
                 tableName,                                // The table to query
                 projection,                               // The columns to return
                 selection,                                     // The columns for the WHERE clause
@@ -56,7 +53,6 @@ public class Crud {
                 null,                                     // don't filter by row groups
                 sortOrder                                 // The sort order
         );
-        return c;
     }
 
     public static Cursor rawQuery(SQLiteOpenHelper database,String sql){
