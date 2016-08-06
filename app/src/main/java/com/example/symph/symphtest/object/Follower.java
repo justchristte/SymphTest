@@ -17,8 +17,6 @@ public class Follower {
     int userId;
     byte[] byteArray;
 
-    public Follower(){}
-
     public Follower(Cursor cursor){
         id=cursor.getInt(0);
         login=cursor.getString(1);

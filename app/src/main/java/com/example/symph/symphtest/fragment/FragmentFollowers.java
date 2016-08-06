@@ -1,9 +1,13 @@
 package com.example.symph.symphtest.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.symph.symphtest.R;
 import com.example.symph.symphtest.adapter.FragmentFollowerAdapter;
 import com.example.symph.symphtest.database.FollowerTable;
+import com.example.symph.symphtest.helper.Helper;
 import com.example.symph.symphtest.object.Follower;
 
 import java.util.ArrayList;
@@ -72,7 +77,28 @@ public class FragmentFollowers extends Fragment implements FragmentFollowerAdapt
     }
 
     @Override
-    public void onItemClick(Follower follower) {
+    public void onItemClick(final Follower follower) {
 
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://github.com/"+follower.getLogin()));
+                        startActivity(browserIntent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("View "+follower.getLogin()+" on browser?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 }

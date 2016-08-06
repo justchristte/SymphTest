@@ -61,14 +61,11 @@ public class FollowerTable extends DatabaseHandler {
         ArrayList<Follower>list=new ArrayList<>();
         String sql="select * from "+TABLE_NAME+" where "+USER_ID+"="+userId;
         Cursor cursor=Crud.rawQuery(this,sql);
-        int c=0;
         if(cursor.moveToFirst()){
             do{
-                c++;
                 list.add(new Follower(cursor));
             }while (cursor.moveToNext());
         }
-        Log.e("Size",""+c);
         return list;
     }
 
