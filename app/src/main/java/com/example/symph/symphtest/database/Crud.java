@@ -6,11 +6,12 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class Crud {
 
     public static long create(SQLiteOpenHelper database, String tableName, ContentValues values){
         SQLiteDatabase db = database.getWritableDatabase();
-
         long newRowId;
         try{
             newRowId = db.insertOrThrow(

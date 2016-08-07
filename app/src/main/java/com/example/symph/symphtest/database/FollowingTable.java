@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.example.symph.symphtest.object.Follower;
 
@@ -32,6 +33,27 @@ public class FollowingTable extends DatabaseHandler implements Table.FieldTypes{
                 .addField(USER_ID, TYPE_INTEGER)
                 .addField(IMAGE,TYPE_BLOB);
         onCreate(this.getWritableDatabase());
+    }
+
+    public void addFollowing(ArrayList<Follower>following){
+        SQLiteDatabase db=this.getWritableDatabase();
+        SQLiteStatement statement=db.compileStatement(table.getInsertStatementExcept(new String[]{ID}));
+
+        db.beginTransaction();
+        Follower follower;
+        for (int c=0;c<following.size();c++){
+            follower=following.get(c);
+            statement.clearBindings();
+            statement.bindString(1, follower.getLogin());
+            statement.bindString(2,follower.getFollowersUrl());
+            statement.bindString(3,follower.getFollowingUrl());
+            statement.bindString(4,follower.getReposUrl());
+            statement.bindLong(5,follower.getUserId());
+            statement.bindBlob(6,follower.getByteArray());
+            statement.execute();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     public long addFollowing(String login,String followers,String followed,

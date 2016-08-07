@@ -39,26 +39,31 @@ public class DataWrapper {
         FollowingTable followingTable=new FollowingTable(activity);
         RepoTable repoTable=new RepoTable(activity);
 
-        Repo repo;
         Follower follower;
-
         int userId=(int)userTable.addUser(user);
+        user.setId(userId);
 
+        ArrayList<Follower>list=new ArrayList<>();
         for(int c=0;c<followers.size();c++){
             follower=new Follower(followers.get(c));
-            follower.setId(userId);
-            followerTable.addFollower(follower);
+            follower.setUserId(userId);
+            list.add(follower);
         }
+        followerTable.addFollowers(list);
+        list.clear();
+
         for(int c=0;c<following.size();c++) {
             follower=new Follower(following.get(c));
-            follower.setId(userId);
-            followingTable.addFollowing(follower);
+            follower.setUserId(userId);
+            list.add(follower);
         }
-        for(int c=0;c<repos.size();c++) {
-            repo=repos.get(c);
-            repo.setId(userId);
-            repoTable.addRepo(repo);
-        }
+        followingTable.addFollowing(list);
+        list.clear();
+
+        for(int c=0;c<repos.size();c++)
+            repos.get(c).setUserId(userId);
+        repoTable.addRepos(repos);
+
         dismissDialog();
         return user;
     }
@@ -100,7 +105,8 @@ public class DataWrapper {
         if(bitmap!=null)
             user.setByteArray(Helper.toByteArray(bitmap));
         else
-            throw new IOException("Unable to download image from "+user.getAvatarUrl());
+            throw new IOException("Unable to download image "+user.getAvatarUrl());
+
         return user;
     }
 
@@ -115,8 +121,12 @@ public class DataWrapper {
     }
 
     public void dismissDialog(){
-        if(progressDialog!=null)
+        try {
+            Thread.sleep(600);
             progressDialog.dismiss();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void showProgressDialog(final String title, final String message){

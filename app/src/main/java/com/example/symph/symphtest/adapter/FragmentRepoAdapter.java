@@ -24,9 +24,19 @@ public class FragmentRepoAdapter extends RecyclerView.Adapter<FragmentRepoAdapte
         inflater= LayoutInflater.from(context);
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView name,description;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            name= (TextView) itemView.findViewById(R.id.repo_adapter_layout_name);
+            description= (TextView) itemView.findViewById(R.id.repo_adapter_layout_description);
+        }
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.user_list_adapter_layout,parent);
+        View view = inflater.inflate(R.layout.repo_adapter_layout,null);
         return new ViewHolder(view);
     }
 
@@ -44,14 +54,4 @@ public class FragmentRepoAdapter extends RecyclerView.Adapter<FragmentRepoAdapte
         return repos.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView name,description;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            name= (TextView) itemView.findViewById(R.id.repo_adapter_layout_name);
-            description= (TextView) itemView.findViewById(R.id.repo_adapter_layout_description);
-        }
-    }
 }

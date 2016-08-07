@@ -26,7 +26,7 @@ public class User {
         avatarUrl=json.getString("avatar_url");
         htmlUrl=json.getString("html_url");
         followersUrl=json.getString("followers_url");
-        followingUrl=json.getString("following_url");
+        followingUrl=json.getString("following_url").replace("{/other_user}","");
         reposUrl=json.getString("repos_url");
     }
 
@@ -39,6 +39,7 @@ public class User {
         followersUrl=cursor.getString(5);
         followingUrl=cursor.getString(6);
         reposUrl=cursor.getString(7);
+        byteArray=cursor.getBlob(8);
     }
 
     public Bundle toBundle(){

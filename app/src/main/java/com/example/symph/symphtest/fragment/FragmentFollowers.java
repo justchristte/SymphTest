@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,7 @@ public class FragmentFollowers extends Fragment{
     RecyclerView listView;
     ArrayList<Follower>list;
     FragmentFollowerAdapter adapter;
+    FragmentActivity context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,33 +46,22 @@ public class FragmentFollowers extends Fragment{
         listView= (RecyclerView) rootView.findViewById(R.id.fragment_followers_layout_list);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         listView.setLayoutManager(layoutManager);
+        context=getActivity();
 
         list=new ArrayList<>();
-        adapter=new FragmentFollowerAdapter(getContext(),list);
-        listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        adapter=new FragmentFollowerAdapter(getActivity(),list);
+        listView.addItemDecoration(new DividerItemDecoration(context, LinearLayout.VERTICAL));
         listView.setAdapter(adapter);
         listViewTouchListener();
 
         Bundle bundle=getArguments();
         int userId=bundle.getInt("userId");
-        if(bundle.getBoolean("isFollwer"))
+        if(bundle.getBoolean("isFollower"))
             getFollowers(userId);
         else
             getFollowing(userId);
 
         return rootView;
-    }
-
-    public void getFollowing(int userId){
-        try{
-            FollowingTable followingTable=new FollowingTable(getContext());
-            ArrayList<Follower>following=followingTable.getFollowingFor(userId);
-            for(int c=0;c<following.size();c++)
-                list.add(following.get(c));
-            adapter.notifyDataSetChanged();
-        }catch (SQLiteException e){
-            e.printStackTrace();
-        }
     }
 
     public void getFollowers(int userId){
@@ -84,29 +76,46 @@ public class FragmentFollowers extends Fragment{
         }
     }
 
+    public void getFollowing(int userId){
+        try{
+            FollowingTable followingTable=new FollowingTable(getContext());
+            ArrayList<Follower>following=followingTable.getFollowingFor(userId);
+            for(int c=0;c<following.size();c++)
+                list.add(following.get(c));
+            adapter.notifyDataSetChanged();
+        }catch (SQLiteException e){
+            e.printStackTrace();
+        }
+    }
+
     public void listViewTouchListener(){
         listView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), listView, new RecyclerTouchListener.ClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                String username = list.get(position).getLogin();
-                DataWrapper wrapper = new DataWrapper(getActivity());
-                try {
-                    UserTable userTable = new UserTable(getContext());
-                    User user = userTable.getUser(username);
-                    if (user == null)
-                        user = wrapper.fetchUserData(username, true);
-                    Intent intent = new Intent(getActivity(), DrawerActivity.class);
-                    intent.putExtras(user.toBundle());
-                    startActivity(intent);
-                } catch (IOException e) {
-                    Helper.displayMessage(e.getMessage(), getActivity().findViewById(R.id.drawer_layout));
-                    wrapper.dismissDialog();
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    Helper.displayMessage("a problem occured while fetching data", getActivity().findViewById(R.id.drawer_layout));
-                    wrapper.dismissDialog();
-                    e.printStackTrace();
-                }
+            public void onClick(View view, final int position) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String username = list.get(position).getLogin();
+                        DataWrapper wrapper = new DataWrapper(getActivity());
+                        try {
+                            UserTable userTable = new UserTable(getContext());
+                            User user = userTable.getUser(username);
+                            if (user == null)
+                                user = wrapper.fetchUserData(username, true);
+                            Intent intent = new Intent(getActivity(), DrawerActivity.class);
+                            intent.putExtras(user.toBundle());
+                            startActivity(intent);
+                        } catch (IOException e) {
+                            Helper.displayMessage(e.getMessage(), getActivity().findViewById(R.id.drawer_layout));
+                            wrapper.dismissDialog();
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            Helper.displayMessage("a problem occured while fetching data", getActivity().findViewById(R.id.drawer_layout));
+                            wrapper.dismissDialog();
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
 
             @Override

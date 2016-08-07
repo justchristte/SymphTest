@@ -27,9 +27,20 @@ public class UsersActivityAdapter extends RecyclerView.Adapter<UsersActivityAdap
         inflater= LayoutInflater.from(context);
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        CircleImageView image;
+        TextView username;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            username= (TextView) itemView.findViewById(R.id.user_list_adapter_layout_username);
+            image= (CircleImageView) itemView.findViewById(R.id.user_list_adapter_layout_image);
+        }
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.user_list_adapter_layout,parent);
+        View view = inflater.inflate(R.layout.user_list_adapter_layout,null);
         return new ViewHolder(view);
     }
 
@@ -47,15 +58,4 @@ public class UsersActivityAdapter extends RecyclerView.Adapter<UsersActivityAdap
         return users.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-
-        CircleImageView image;
-        TextView username;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            username= (TextView) itemView.findViewById(R.id.user_list_adapter_layout_username);
-            image= (CircleImageView) itemView.findViewById(R.id.user_list_adapter_layout_image);
-        }
-    }
 }

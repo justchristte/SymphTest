@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.example.symph.symphtest.object.Follower;
 
@@ -52,15 +53,38 @@ public class FollowerTable extends DatabaseHandler implements Table.FieldTypes{
                 follower.getUserId(), follower.getByteArray());
     }
 
+    public void addFollowers(ArrayList<Follower>followers){
+        SQLiteDatabase db=this.getWritableDatabase();
+        SQLiteStatement statement=db.compileStatement(table.getInsertStatementExcept(new String[]{ID}));
+
+        db.beginTransaction();
+        Follower follower;
+        for (int c=0;c<followers.size();c++){
+            follower=followers.get(c);
+            statement.clearBindings();
+            statement.bindString(1, follower.getLogin());
+            statement.bindString(2,follower.getFollowersUrl());
+            statement.bindString(3,follower.getFollowingUrl());
+            statement.bindString(4,follower.getReposUrl());
+            statement.bindLong(5,follower.getUserId());
+            statement.bindBlob(6,follower.getByteArray());
+            statement.execute();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
     public ArrayList<Follower> getFollowersFor(int userId){
         ArrayList<Follower>list=new ArrayList<>();
         String sql="select * from "+TABLE_NAME+" where "+USER_ID+"="+userId;
+
         Cursor cursor=Crud.rawQuery(this,sql);
         if(cursor.moveToFirst()){
             do{
                 list.add(new Follower(cursor));
             }while (cursor.moveToNext());
         }
+
         return list;
     }
 

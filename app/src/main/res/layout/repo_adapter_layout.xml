@@ -13,7 +13,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
 
@@ -21,16 +21,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="25dp"
-                android:layout_marginLeft="10dp"
-                android:text="repo.name"
+                android:textStyle="bold"
                 android:id="@+id/repo_adapter_layout_name"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:layout_marginLeft="10dp"
-                android:inputType="textImeMultiLine"
-                android:text="Description"
+                android:textSize="18dp"
+                android:layout_weight="1"
                 android:id="@+id/repo_adapter_layout_description"/>
 
         </LinearLayout>

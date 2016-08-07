@@ -51,6 +51,40 @@ public class Table {
         return string;
     }
 
+    public String getInsertStatementExcept(String[]insertException){
+        String sql="insert into "+name+" (";
+        String fieldName;
+        ArrayList<String>questionMarks=new ArrayList<>();
+        String questionMark;
+        int size=fieldNames.size();
+
+        for(int c=0;c<size;c++){
+            fieldName=fieldNames.get(c);
+            if(!inExeption(fieldName,insertException)){
+                sql+=fieldName;
+                questionMark="?";
+                if(c+1<size){
+                    sql+=",";
+                    questionMark+=",";
+                }
+                questionMarks.add(questionMark);
+            }
+            sql+="";
+        }
+        sql+=") values(";
+        for (int c=0;c<questionMarks.size();c++)
+            sql+=questionMarks.get(c);
+        sql+=")";
+        return sql;
+    }
+
+    public boolean inExeption(String fieldName,String[]insertException){
+        for (int c=0;c<insertException.length;c++)
+            if(fieldName.toLowerCase().equals(insertException[c].toLowerCase()))
+                return true;
+        return false;
+    }
+
     public String getDeleteQuery() {
         return "DROP TABLE IF EXISTS "+name;
     }

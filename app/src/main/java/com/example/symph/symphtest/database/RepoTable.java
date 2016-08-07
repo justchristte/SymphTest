@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import com.example.symph.symphtest.object.Repo;
 
@@ -33,6 +35,26 @@ public class RepoTable extends DatabaseHandler implements Table.FieldTypes{
         onCreate(this.getWritableDatabase());
     }
 
+    public void addRepos(ArrayList<Repo>repos ){
+        SQLiteDatabase db=this.getWritableDatabase();
+        SQLiteStatement statement=db.compileStatement(table.getInsertStatementExcept(new String[]{ID}));
+
+        db.beginTransaction();
+        Repo repo=null;
+        for(int c=0;c<repos.size();c++){
+            repo=repos.get(c);
+            statement.clearBindings();
+            statement.bindString(1, repo.getGithubId());
+            statement.bindString(2,repo.getName());
+            statement.bindString(3,repo.getHtmlUrl());
+            statement.bindString(4,repo.getDescription());
+            statement.bindLong(5, repo.getUserId());
+            statement.execute();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
     public long addRepo(Repo repo){
         ContentValues values=new ContentValues();
         values.put(GITHUB_ID, repo.getGithubId());
@@ -42,6 +64,8 @@ public class RepoTable extends DatabaseHandler implements Table.FieldTypes{
         values.put(USER_ID,repo.getUserId());
         return Crud.create(this,TABLE_NAME,values);
     }
+
+
 
     public ArrayList<Repo> getReposFor(int userId){
         ArrayList<Repo>list=new ArrayList<>();

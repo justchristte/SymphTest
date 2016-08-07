@@ -26,7 +26,6 @@ public class Helper {
     public static String getJsonResponse(String urlString){
         StringBuilder result=new StringBuilder();
         try {
-
             URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
